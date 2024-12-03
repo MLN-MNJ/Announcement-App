@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        /* Include CSS from your provided code */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <h2>Welcome, <span th:text="${student.name}"></span></h2>
+
+        <h3>Announcements</h3>
+
+        <!-- Category Filter -->
+        <form method="get" th:action="@{/studentDashboard}" class="filter-form">
+            <label for="category">Filter by Category:</label>
+            <select name="category" id="category" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option th:each="category : ${categories}" 
+                        th:value="${category}" 
+                        th:text="${category}" 
+                        th:selected="${category == currentCategory}">
+                </option>
+            </select>
+        </form>
+
+        <!-- Display Announcements -->
+        <ul th:if="${announcements}">
+            <li th:each="announcement : ${announcements}">
+                <strong th:text="${announcement.title}"></strong> 
+                (Category: <span th:text="${announcement.category}"></span>)<br>
+                <em>Posted by <span th:text="${announcement.teacherName}"></span> 
+                    on <span th:text="${announcement.date}"></span></em>
+            </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(announcements)}">No announcements available.</p>
+
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+
+    <footer>
+        &copy; 2024 School Name. All rights reserved.
+    </footer>
+</body>
+</html>

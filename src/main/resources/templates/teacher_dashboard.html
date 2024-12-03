@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <style>
+        /* Include CSS from your provided code */
+    </style>
+</head>
+<body>
+
+    <h1>Teacher Dashboard</h1>
+
+    <!-- Add Announcement Form -->
+    <form th:action="@{/teacherDashboard}" method="POST">
+        <label for="announcement">Announcement:</label>
+        <textarea id="announcement" name="announcement" required></textarea><br>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+            <option value="General">General</option>
+            <option value="Examination">Examination</option>
+            <option value="Assignment">Assignment</option>
+        </select><br>
+
+        <label for="sections">Select Sections:</label><br>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="sections" value="A"> Section A</label>
+            <label><input type="checkbox" name="sections" value="B"> Section B</label>
+            <label><input type="checkbox" name="sections" value="C"> Section C</label>
+            <label><input type="checkbox" name="sections" value="D"> Section D</label>
+            <label><input type="checkbox" name="sections" value="E"> Section E</label>
+        </div><br>
+
+        <button type="submit" class="publish-button">Publish</button>
+    </form>
+
+    <!-- Logout Button -->
+    <form th:action="@{/logout}" method="POST">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        /* Header section */
+        h1 {
+            background-color: #800000; /* Maroon color */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Form styling */
+        form {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        form input, form textarea, form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #800000; /* Maroon color */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        form button:hover {
+            background-color: #660000; /* Darker maroon for hover effect */
+        }
+
+        /* Table styling */
+        table {
+            width: 80%; /* Reduced width */
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        /* Column width adjustments */
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            width: 10%; /* Section */
+        }
+
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            width: 15%; /* Category */
+        }
+
+        table th:nth-child(3),
+        table td:nth-child(3) {
+            width: 30%; /* Announcement */
+        }
+
+        table th:nth-child(4),
+        table td:nth-child(4) {
+            width: 15%; /* Teacher */
+        }
+
+        table th:nth-child(5),
+        table td:nth-child(5) {
+            width: 10%; /* Date */
+        }
+
+        table th:nth-child(6),
+        table td:nth-child(6) {
+            width: 10%; /* Actions */
+        }
+
+        table th {
+            background-color: #800000;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Buttons for delete */
+        .delete-button {
+            background-color: #d9534f; /* Red color */
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #c9302c; /* Darker red for hover effect */
+        }
+
+        /* Logout button styling */
+        .logout-button {
+            background-color: #5bc0de; /* Light blue color */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 150px; /* Set width for better alignment */
+            margin: 20px auto; /* Center button */
+        }
+
+        .logout-button:hover {
+            background-color: #31b0d5; /* Darker blue for hover effect */
+        }
+
+        /* Centering the All Announcements heading */
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 40px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            form {
+                width: 90%;
+                padding: 15px;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+    <!-- Add Announcement Form -->
+    <form action="{{ url_for('add_announcement') }}" method="POST">
+        <label for="category">Category:</label>
+        <select name="category" required>
+            <option value="general">General</option>
+            <option value="examination">Examination</option>
+            <option value="assignment">Assignment</option>
+        </select><br>
+
+        <label for="announcement">Announcement:</label>
+        <textarea name="announcement" required></textarea><br>
+
+        <label for="teacher_name">Teacher Name:</label>
+        <input type="text" name="teacher_name" required><br>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" required><br>
+
+        <label for="section">Section:</label>
+        <select name="section" required>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+        </select><br>
+
+        <button type="submit">Add Announcement</button>
+    </form>
+
+    <!-- Announcements Table -->
+    <h2>All Announcements</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Section</th>
+                <th>Category</th>
+                <th>Announcement</th>
+                <th>Teacher</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for announcement in announcements %}
+                <tr>
+                    <td>{{ announcement[4] }}</td> <!-- section -->
+                    <td>{{ announcement[3] }}</td> <!-- category -->
+                    <td>{{ announcement[0] }}</td> <!-- announcement -->
+                    <td>{{ announcement[1] }}</td> <!-- teacher_name -->
+                    <td>{{ announcement[2] }}</td> <!-- date -->
+                    <td>
+                        <form action="{{ url_for('delete_announcement', section=announcement[4]) }}" method="POST">
+                            <input type="hidden" name="announcement" value="{{ announcement[0] }}">
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Logout Button -->
+    <form action="{{ url_for('logout') }}" method="POST">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+
+</body>
+</html>
